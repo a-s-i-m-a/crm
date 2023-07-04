@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import {ConfigModule, ConfigService} from "@nestjs/config";
-import {TypeOrmModule} from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-      AuthModule,
     UsersModule,
+    AuthModule,
     ConfigModule.forRoot({
-    isGlobal: true,
-  }),
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -26,7 +26,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
         autoLoadEntities: true,
         logging: true,
       }),
-    })
+    }),
   ],
   controllers: [],
   providers: [ConfigService],
