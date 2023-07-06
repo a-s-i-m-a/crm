@@ -66,7 +66,7 @@ export class AuthService {
           message: 'Некорректный емайл или пароль',
         });
       } else {
-        throw new InternalServerErrorException('Internal server error');
+        throw new InternalServerErrorException('Некорректный емайл или пароль');
       }
     }
   }
