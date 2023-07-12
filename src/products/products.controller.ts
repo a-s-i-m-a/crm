@@ -25,6 +25,13 @@ export class ProductsController {
     return this.productsService.findAll(page, limit);
   }
 
+  @Get('search')
+  async searchProducts(
+    @Query('query') query: string,
+  ): Promise<ProductEntity[] | string> {
+    return this.productsService.findByTitleOrBarcode(query);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<ProductEntity> {
     return this.productsService.findOne(id);

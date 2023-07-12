@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { ProductEntity } from './product.entity';
 import { CreateProductDto } from './dto/createProductDto';
 import { UpdateProductDto } from './dto/updateProductDto';
@@ -78,5 +78,11 @@ export class ProductsService {
     }
 
     return barcode;
+  }
+
+  async findByTitleOrBarcode(searchQuery: string): Promise<ProductEntity[]> {
+    return this.productRepository.find({
+      where: [{ title: Like(`%${searchQuery}%`) }, { barcode: searchQuery }],
+    });
   }
 }
