@@ -16,20 +16,17 @@ import { UpdateProductDto } from './dto/updateProductDto';
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
-
   @Get()
   async findAll(
+    @Query('query') query: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10,
   ): Promise<ProductEntity[]> {
-    return this.productsService.findAll(page, limit);
-  }
-
-  @Get('search')
-  async searchProducts(
-    @Query('query') query: string,
-  ): Promise<ProductEntity[] | string> {
-    return this.productsService.findByTitleOrBarcode(query);
+    if (query) {
+      return this.productsService.findByTitleOrBarcode(query);
+    } else {
+      return this.productsService.findAll(page, limit);
+    }
   }
 
   @Get(':id')
