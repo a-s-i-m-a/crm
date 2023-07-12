@@ -8,8 +8,11 @@ import {
 
 @Entity()
 export class ProductEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  barcode: string;
 
   @Column({ default: true })
   isInStock: boolean;

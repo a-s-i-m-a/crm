@@ -1,4 +1,6 @@
 export class CreateProductDto {
+  id: string;
+  barcode: string;
   isInStock: boolean;
   count: number;
   sizes: string;

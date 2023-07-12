@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { ProductEntity } from './product.entity';
 import { CreateProductDto } from './dto/createProductDto';
 import { UpdateProductDto } from './dto/updateProductDto';
+import { v4 as uuidv4 } from 'uuid';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepository: Repository<ProductEntity>,
+    private readonly configService: ConfigService,
   ) {}
 
   async findAll(page = 1, limit = 10): Promise<ProductEntity[]> {
@@ -29,7 +32,13 @@ export class ProductsService {
   }
 
   async create(createProductDto: CreateProductDto): Promise<ProductEntity> {
-    const product = this.productRepository.create(createProductDto);
+    const id = uuidv4();
+    const barcode = this.generateBarcode(10);
+    const product = this.productRepository.create({
+      ...createProductDto,
+      id,
+      barcode,
+    });
     return this.productRepository.save(product);
   }
 
@@ -57,5 +66,23 @@ export class ProductsService {
     }
     await this.productRepository.remove(product);
     return product;
+  }
+
+  generateBarcode(length: number): string {
+    const characters = this.configService.get('CHARACTERS');
+    let barcode = '';
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      barcode += characters.charAt(randomIndex);
+    }
+
+    return barcode;
+  }
+
+  async findByTitleOrBarcode(searchQuery: string): Promise<ProductEntity[]> {
+    return this.productRepository.find({
+      where: [{ title: Like(`%${searchQuery}%`) }, { barcode: searchQuery }],
+    });
   }
 }
