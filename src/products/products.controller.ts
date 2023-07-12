@@ -27,7 +27,6 @@ export class ProductsController {
 
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<ProductEntity> {
-    console.log('id', id);
     return this.productsService.findOne(id);
   }
 
