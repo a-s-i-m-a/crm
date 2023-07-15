@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { StatisticsModule } from './statistics/statistics.module';
+import { SellHistoryModule } from './sell-history/sell-history.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { StatisticsModule } from './statistics/statistics.module';
     AuthModule,
     ProductsModule,
     StatisticsModule,
+    SellHistoryModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

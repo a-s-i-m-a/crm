@@ -6,22 +6,19 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('products')
 export class ProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   barcode: string;
 
   @Column({ default: true })
   isInStock: boolean;
 
-  @Column({ default: 0 })
-  count: number;
-
-  @Column()
-  sizes: string;
+  @Column('varchar', { array: true })
+  sizes: string[];
 
   @Column()
   color: string;
