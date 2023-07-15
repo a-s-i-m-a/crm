@@ -31,7 +31,6 @@ export class SellService {
       // Remove the sold size from the product's sizes
       product.sizes.splice(soldSizeIndex, 1);
 
-      console.log('kjghjkh', product);
       // Create a sell history entry with the current date and time
       const sellHistoryEntry = this.sellHistoryRepository.create({
         barcode,
@@ -44,8 +43,11 @@ export class SellService {
       });
 
       if (product.sizes.length === 0) {
-        // Delete the product from the database
-        await this.productRepository.remove(product);
+        // Update the product's isInStock property to false
+        product.isInStock = false;
+
+        // Save the updated product
+        await this.productRepository.save(product);
       } else {
         // Save the updated product
         await this.productRepository.save(product);
@@ -53,6 +55,38 @@ export class SellService {
 
       // Save the sell history entry
       await this.sellHistoryRepository.save(sellHistoryEntry);
+    } else {
+      throw new NotFoundException('Product not found');
+    }
+  }
+
+  async returnSoldProduct(
+    barcode: string,
+    returnedSize: string,
+  ): Promise<void> {
+    // Get the product from the database based on the barcode
+    const product = await this.productRepository.findOne({
+      where: { barcode },
+    });
+
+    if (product) {
+      // Check if the returned size is not already in the product's sizes array
+      if (!product.sizes.includes(returnedSize)) {
+        // Add the returned size back to the product's sizes
+        product.sizes.push(returnedSize);
+
+        // Update the product's isInStock property to false
+        product.isInStock = true;
+
+        // Save the updated product
+        await this.productRepository.save(product);
+
+        // Delete sold product from history
+        await this.sellHistoryRepository.delete({
+          barcode,
+          soldSize: returnedSize,
+        });
+      }
     } else {
       throw new NotFoundException('Product not found');
     }
