@@ -76,7 +76,7 @@ export class SellService {
         product.sizes.push(returnedSize);
 
         // Update the product's isInStock property to false
-        product.isInStock = true;
+        product.isInStock = false;
 
         // Save the updated product
         await this.productRepository.save(product);

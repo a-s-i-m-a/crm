@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
+import { Repository } from 'typeorm';
 import { SellHistoryEntity } from './sell-history.entity';
 
 @Injectable()
@@ -46,26 +46,6 @@ export class SellHistoryService {
         {
           startOfMonth,
           endOfMonth,
-        },
-      );
-    } else if (timePeriod === 'week') {
-      const now = new Date();
-      const startOfWeek = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() - now.getDay(),
-      );
-      const endOfWeek = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + (6 - now.getDay()),
-      );
-
-      query = query.andWhere(
-        'sell_history.sellDate BETWEEN :startOfWeek AND :endOfWeek',
-        {
-          startOfWeek,
-          endOfWeek,
         },
       );
     } else if (timePeriod === 'day') {
