@@ -16,6 +16,7 @@ export class SellHistoryService {
     startDate?: string,
     endDate?: string,
     timePeriod?: string,
+    search?: string,
   ): Promise<SellHistoryEntity[]> {
     const skip = (page - 1) * limit;
 
@@ -87,6 +88,12 @@ export class SellHistoryService {
           endOfDay,
         },
       );
+    }
+
+    if (search) {
+      query = query.andWhere('sell_history.title ILIKE :search', {
+        search: `%${search}%`,
+      });
     }
 
     return query.getMany();

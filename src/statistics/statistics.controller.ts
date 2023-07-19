@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { StatisticsService } from './statistics.service';
 
 @Controller('statistics')
@@ -13,5 +13,16 @@ export class StatisticsController {
     profit: number;
   }> {
     return this.statisticsService.calculateProductStatistics();
+  }
+
+  @Get('sell-history')
+  async getSellHistoryStatistics(
+    @Query('timePeriod') timePeriod?: string,
+  ): Promise<{
+    totalBoughtPrice: number;
+    totalSoldPrice: number;
+    income: number;
+  }> {
+    return await this.statisticsService.getSellHistoryStatistics(timePeriod);
   }
 }

@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { ProductEntity } from '../products/product.entity';
 
 @Entity('sell_history')
 export class SellHistoryEntity {
@@ -22,4 +29,8 @@ export class SellHistoryEntity {
 
   @Column()
   productId: string;
+
+  @ManyToOne(() => ProductEntity)
+  @JoinColumn({ name: 'productId' })
+  product: ProductEntity;
 }
