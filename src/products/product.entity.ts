@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { SellHistoryEntity } from '../sell-history/sell-history.entity';
 
 @Entity('products')
 export class ProductEntity {
@@ -37,4 +39,7 @@ export class ProductEntity {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @OneToMany(() => SellHistoryEntity, (sellHistory) => sellHistory.product)
+  sellHistories: SellHistoryEntity[];
 }

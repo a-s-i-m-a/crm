@@ -18,6 +18,7 @@ export class SellHistoryController {
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
     @Query('timePeriod') timePeriod?: string,
+    @Query('search') search?: string,
   ): Promise<SellHistoryEntity[]> {
     return this.sellHistoryService.getSellHistory(
       page,
@@ -25,6 +26,7 @@ export class SellHistoryController {
       startDate,
       endDate,
       timePeriod,
+      search,
     );
   }
 
