@@ -61,9 +61,7 @@ export class StatisticsService {
     totalSoldPrice: number;
     income: number;
   }> {
-    // Retrieve sell histories based on the time period (if provided)
     let query = this.sellHistoryRepository.createQueryBuilder('sellHistory');
-
     if (timePeriod === 'day') {
       const now = new Date();
       const startOfDay = new Date(

@@ -47,8 +47,8 @@ export class ProductsController {
     return this.productsService.update(id, updateProductDto);
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: number): Promise<ProductEntity> {
+  @Put('remove/:id')
+  async remove(@Param('id') id: number): Promise<boolean> {
     return this.productsService.remove(id);
   }
 }

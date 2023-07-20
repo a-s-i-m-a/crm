@@ -20,6 +20,9 @@ export class ProductsService {
     return this.productRepository.find({
       skip,
       take: limit,
+      where: {
+        isInStock: true,
+      },
     });
   }
 
@@ -27,6 +30,7 @@ export class ProductsService {
     return this.productRepository.findOne({
       where: {
         id,
+        isInStock: true,
       },
     });
   }
@@ -55,17 +59,16 @@ export class ProductsService {
     return this.productRepository.save(updatedProduct);
   }
 
-  async remove(id): Promise<ProductEntity> {
-    const product = await this.productRepository.findOne({
-      where: {
-        id,
-      },
+  async remove(id): Promise<boolean> {
+    const result = await this.productRepository.update(id, {
+      isInStock: false,
     });
-    if (!product) {
-      return null;
+
+    if (result.affected === 0) {
+      return false;
     }
-    await this.productRepository.remove(product);
-    return product;
+
+    return true;
   }
 
   generateBarcode(length: number): string {
@@ -82,7 +85,10 @@ export class ProductsService {
 
   async findByTitleOrBarcode(searchQuery: string): Promise<ProductEntity[]> {
     return this.productRepository.find({
-      where: [{ title: Like(`%${searchQuery}%`) }, { barcode: searchQuery }],
+      where: [
+        { title: Like(`%${searchQuery}%`), isInStock: true },
+        { barcode: searchQuery, isInStock: true },
+      ],
     });
   }
 }
