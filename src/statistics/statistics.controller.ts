@@ -19,6 +19,7 @@ export class StatisticsController {
   async getSellHistoryStatistics(
     @Query('timePeriod') timePeriod?: string,
   ): Promise<{
+    totalCount: number;
     totalBoughtPrice: number;
     totalSoldPrice: number;
     income: number;

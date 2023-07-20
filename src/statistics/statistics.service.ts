@@ -56,6 +56,7 @@ export class StatisticsService {
   }
 
   async getSellHistoryStatistics(timePeriod?: string): Promise<{
+    totalCount: number;
     totalBoughtPrice: number;
     totalSoldPrice: number;
     income: number;
@@ -118,8 +119,10 @@ export class StatisticsService {
     }, 0);
 
     const income = totalSoldPrice - totalBoughtPrice;
+    const totalCount = sellHistories.length;
 
     return {
+      totalCount,
       income,
       totalBoughtPrice,
       totalSoldPrice,
