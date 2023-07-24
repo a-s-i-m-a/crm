@@ -19,7 +19,10 @@ export class ProductEntity {
   @Column({ default: true })
   isInStock: boolean;
 
-  @Column('varchar', { array: true })
+  @Column({ default: 0 })
+  count: number;
+
+  @Column('varchar', { array: true, nullable: true })
   sizes: string[];
 
   @Column()

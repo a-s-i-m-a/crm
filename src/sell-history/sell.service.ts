@@ -31,6 +31,9 @@ export class SellService {
       // Remove the sold size from the product's sizes
       product.sizes.splice(soldSizeIndex, 1);
 
+      // Decrease the count by 1
+      product.count -= 1;
+
       // Create a sell history entry with the current date and time
       const sellHistoryEntry = this.sellHistoryRepository.create({
         barcode,
@@ -74,6 +77,9 @@ export class SellService {
       if (!product.sizes.includes(returnedSize)) {
         // Add the returned size back to the product's sizes
         product.sizes.push(returnedSize);
+
+        // Increment the count by 1
+        product.count += 1;
 
         // Update the product's isInStock property to false
         product.isInStock = true;

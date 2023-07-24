@@ -39,6 +39,13 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
+  @Post('group')
+  async createFromArray(
+    @Body() createProductDto: CreateProductDto[],
+  ): Promise<any> {
+    return this.productsService.createFromArray(createProductDto);
+  }
+
   @Put(':id')
   async update(
     @Param('id') id: number | string,

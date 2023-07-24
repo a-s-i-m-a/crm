@@ -3,7 +3,7 @@ export class CreateProductDto {
   barcode: string;
   isInStock: boolean;
   count: number;
-  sizes: string[];
+  sizes?: string[];
   color: string;
   soldPrice: number;
   boughtPrice: number;

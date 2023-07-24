@@ -21,16 +21,10 @@ export class StatisticsService {
   }> {
     const products = await this.entityManager
       .createQueryBuilder(ProductEntity, 'product')
-      .select('SUM(ARRAY_LENGTH(product.sizes, 1))', 'totalCount')
-      .addSelect(
-        'SUM(product.soldPrice * ARRAY_LENGTH(product.sizes, 1))',
-        'totalSoldPrice',
-      )
-      .addSelect(
-        'SUM(product.boughtPrice * ARRAY_LENGTH(product.sizes, 1))',
-        'totalBoughtPrice',
-      )
-      .groupBy('product.id')
+      .select('SUM(product.count)', 'totalCount')
+      .addSelect('SUM(product.soldPrice * product.count)', 'totalSoldPrice')
+      .addSelect('SUM(product.boughtPrice * product.count)', 'totalBoughtPrice')
+      .where('product.isInStock = :isInStock', { isInStock: true }) // Filter products where isInStock is true
       .getRawMany();
 
     const totalCount = products.reduce(

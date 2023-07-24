@@ -46,6 +46,28 @@ export class ProductsService {
     return this.productRepository.save(product);
   }
 
+  async createFromArray(
+    products: CreateProductDto[],
+  ): Promise<ProductEntity[]> {
+    const createdProducts: ProductEntity[] = [];
+
+    for (const productData of products) {
+      const id = uuidv4();
+      const barcode = this.generateBarcode(10);
+
+      const product = this.productRepository.create({
+        ...productData,
+        id,
+        barcode,
+      });
+
+      const createdProduct = await this.productRepository.save(product);
+      createdProducts.push(createdProduct);
+    }
+
+    return createdProducts;
+  }
+
   async update(id, updateProductDto: UpdateProductDto): Promise<ProductEntity> {
     const product = await this.productRepository.findOne({
       where: {
